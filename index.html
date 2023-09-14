@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <link rel="stylesheet" href="../dist/output.css">
+  <link rel="stylesheet" href="input.css">
+  
+  <title>Frontend Mentor | Age calculator app</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution { font-size: 11px; text-align: center; }
+    .attribution a { color: hsl(228, 45%, 44%); }
+  </style>
+</head>
+<body class="bg-gray-200">
+  <div class="card flex my-8 rounded-3xl flex-col w-11/12 mx-auto bg-white md:w-5/12 md:mt-32">
+    <div class="flex mx-4 mt-3 w-full">
+    <div class="w-1/3 flex flex-col">
+      <label class="text-lg uppercase text-gray-400" for="">Day</label>
+      <input id="day" class="w-2/3 font-bold text-xl border border-gray-400 rounded-lg py-2 px-2 focus:border-purple-600 focus:outline-none"  type="text" placeholder="DD">
+      <span id="dayerror" class="text-xs text-red-600 font-extralight w-2/3"></span>
+    </div>
+    <div class="w-1/3 flex flex-col">
+      <label class="text-lg uppercase text-gray-400" for="">Month</label>
+      <input id="month" class="w-2/3 font-bold text-xl border border-gray-400 rounded-lg py-2 px-2 focus:border-purple-600 focus:outline-none"" type="text" placeholder="MM">
+      <span id="montherror" class="text-xs text-red-600 font-extralight w-2/3"></span>
+    </div>
+    <div class="w-1/3 flex flex-col">
+      <label class="text-lg uppercase text-gray-400" for="">Year</label>
+      <input id="year" class="w-2/3 font-bold text-xl border border-gray-400 rounded-lg py-2 px-2 focus:border-purple-600 focus:outline-none"" type="text" placeholder="YYYY">
+      <span id="yearerror" class="text-xs text-red-600 font-extralight w-2/3"></span>
+    </div>
+    </div>
+    
+    <div class="my-7 relative md:mx-4">
+      <hr class="bg-gray-200 my-7 mx-4">
+      <img class="bg-purple-600  cursor-pointer my-1 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 p-1 h-12 w-12 active:bg-black md:right-px md:left-auto md:h-16 md:w-16" src="../assets/images/icon-arrow.svg" alt="">
+    </div>
+    
+
+  
+ 
+    <div class="mx-4 mb-10">
+      <p class="text-5xl font-extrabold"><span class="text-purple-500" id="outputYears">-- </span>years</p>
+      <p class="text-5xl font-extrabold"><span class="text-purple-500" id="outputMonths">-- </span>months</p>
+      <p class="text-5xl font-extrabold"><span class="text-purple-500" id="outputDays">-- </span>days</p>
+    </div>
+    
+  
+</div>
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Your Name Here</a>.
+  </div>
+
+
+  <script>
+  // Fonction pour calculer l'âge à partir de la date de naissance
+  function calculerAge() {
+    // Récupérer les valeurs entrées par l'utilisateur pour le jour, le mois et l'année
+    const day = parseInt(document.getElementById("day").value);
+    const month = parseInt(document.getElementById("month").value);
+    const year = parseInt(document.getElementById("year").value);
+
+    // Obtenir la date actuelle
+    const currentDate = new Date();
+
+   // Vérification du champ de jour
+   if (day < 1 || day > 31) {
+    document.getElementById("dayerror").textContent = "Must be a valid day";
+    document.getElementById("day").classList.remove("border-gray-400");
+    document.getElementById("day").classList.add("border-red-400");
+    return;
+  }
+
+  // Vérification du champ de mois
+  if ( month < 1 || month > 12) {
+    document.getElementById("montherror").textContent = "Must be a valid month";
+    document.getElementById("month").classList.remove("border-gray-400");
+    document.getElementById("month").classList.add("border-red-400");
+    return;
+  }
+
+  // Vérification du champ d'année
+  if (year < 1900 || year > currentDate.getFullYear()) {
+    document.getElementById("yearerror").textContent = "Must be a valid year";
+    document.getElementById("year").classList.remove("border-gray-400");
+    document.getElementById("year").classList.add("border-red-400");
+    return;
+  }
+  if (isNaN(day) || isNaN(month) || isNaN(year)) {
+    document.getElementById("dayerror").textContent="All the fields must be completed";
+    document.getElementById("montherror").textContent="All the fields must be completed";
+    document.getElementById("yearerror").textContent="All the fields must be completed";
+    return;
+  }
+
+  // Réinitialiser les messages d'erreur s'il n'y a pas d'erreur
+  document.getElementById("dayerror").textContent = "";
+  document.getElementById("montherror").textContent = "";
+  document.getElementById("yearerror").textContent = "";
+
+    // Créer une date de naissance à partir des valeurs entrées
+    const birthDate = new Date(year, month - 1, day); // Mois est 0-indexé
+
+    // Calculer la différence en millisecondes entre les deux dates
+    const difference = currentDate - birthDate;
+
+    // Calculer l'âge en années, mois et jours
+    const ageInMilliseconds = new Date(difference);
+    const years = ageInMilliseconds.getUTCFullYear() - 1970;
+    const months = ageInMilliseconds.getUTCMonth();
+    const days = ageInMilliseconds.getUTCDate() - 1; // -1 pour exclure le jour actuel
+
+    // Afficher l'âge dans les éléments HTML correspondants
+  document.getElementById("outputYears").textContent = years;
+  document.getElementById("outputMonths").textContent = months;
+  document.getElementById("outputDays").textContent = days;
+  }
+
+  // Associer la fonction de calcul d'âge au clic sur l'image de flèche
+  document.querySelector(".bg-purple-600").addEventListener("click", calculerAge);
+  
+
+
+  </script>
+</body>
+</html>
